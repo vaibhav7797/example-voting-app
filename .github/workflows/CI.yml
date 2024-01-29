@@ -35,4 +35,4 @@ jobs:
             *.cache-to=type=gha,scope=${{ github.ref }},mode=max
       -
         name: Start services
-        run: docker compose up --wait --no-build
+        run: docker compose logs -f
