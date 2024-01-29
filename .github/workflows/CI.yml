@@ -1,0 +1,38 @@
+name: ci
+on:
+  # pull_request:
+  push:
+    branches:
+      - main
+env:
+  APP_ENV: 'test'
+
+jobs:
+  ci:
+    name: 'Build & Deploy'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 'Set up project'
+        uses: actions/checkout@v2.3.4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        uses: docker/bake-action@v4
+        with:
+          pull: true
+          load: true
+          files: |
+            docker-compose.yml
+          set: |
+            *.cache-from=type=gha,scope=${{ github.ref }}
+            *.cache-from=type=gha,scope=refs/heads/main
+            *.cache-to=type=gha,scope=${{ github.ref }},mode=max
+
+      - name: Start service
+        run: |
+          docker compose up --wait --no-build
