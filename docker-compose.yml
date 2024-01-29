@@ -58,8 +58,8 @@ services:
     healthcheck:
       test: /healthchecks/redis.sh
       interval: "5s"
-    networks:
-      - back-tier
+    # networks:
+    #   - back-tier
 
   db:
     image: postgres:15-alpine
