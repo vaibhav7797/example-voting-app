@@ -35,4 +35,4 @@ jobs:
 
       - name: Start service
         run: |
-          docker compose up --wait --no-build
+          docker-compose up --wait --no-build
